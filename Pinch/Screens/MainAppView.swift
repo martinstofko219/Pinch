@@ -32,6 +32,8 @@ struct MainAppView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                Color.clear
+                
                 Image("magazine-front-cover")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -62,11 +64,19 @@ struct MainAppView: View {
             .onAppear {
                 isAnimating = true
             }
-        }.navigationViewStyle(.stack)
+            
+            //MARK: Info Panel
+            .overlay(alignment: .top) {
+                InfoPanelView(scale: imageScale, offset: imageOffset)
+                    .padding(.horizontal)
+                    .padding(.top, 30)
+            }
+        }
+        .navigationViewStyle(.stack)
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainAppView_Previews: PreviewProvider {
     static var previews: some View {
         MainAppView()
             .preferredColorScheme(.dark)

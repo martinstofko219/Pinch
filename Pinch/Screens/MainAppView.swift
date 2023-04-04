@@ -45,6 +45,7 @@ struct MainAppView: View {
                     .animation(.linear(duration: 1), value: isAnimating)
                     .scaleEffect(imageScale)
                     .onTapGesture(count: 2) { imageDoubleTap() }
+                //MARK: Drag Gesture
                     .gesture(
                         DragGesture()
                             .onChanged({ value in
@@ -54,6 +55,27 @@ struct MainAppView: View {
                             })
                             .onEnded({ value in
                                 if imageScale <= 1 {
+                                    resetImageState()
+                                }
+                            })
+                    )
+                
+                //MARK: Magnification Gesture
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged({ value in
+                                withAnimation(.linear(duration: 1)) {
+                                    if imageScale >= 1 && imageScale <= 5 {
+                                        imageScale = value
+                                    } else if imageScale > 5 {
+                                        imageScale = 5
+                                    }
+                                }
+                            })
+                            .onEnded({ _ in
+                                if imageScale > 5 {
+                                    imageScale = 5
+                                } else if imageScale <= 1 {
                                     resetImageState()
                                 }
                             })
@@ -72,7 +94,7 @@ struct MainAppView: View {
                     .padding(.top, 30)
             }
             
-            //MARK: Controls
+            //MARK: Zoom Controls
             .overlay(alignment: .bottom, content: {
                 Group {
                     HStack {

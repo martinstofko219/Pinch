@@ -71,6 +71,54 @@ struct MainAppView: View {
                     .padding(.horizontal)
                     .padding(.top, 30)
             }
+            
+            //MARK: Controls
+            .overlay(alignment: .bottom, content: {
+                Group {
+                    HStack {
+                        Button {
+                            withAnimation(.spring()) {
+                                if imageScale > 1 {
+                                    imageScale -= 1
+                                    
+                                    // safety precaution to not go below 1x scale
+                                    if (imageScale <= 1) {
+                                        resetImageState()
+                                    }
+                                }
+                            }
+                        } label: {
+                            ControlImageView(iconName: "minus.magnifyingglass")
+                        }
+                        
+                        Button {
+                            resetImageState()
+                        } label: {
+                            ControlImageView(iconName: "arrow.up.left.and.down.right.magnifyingglass")
+                        }
+                        
+                        Button {
+                            withAnimation(.spring()) {
+                                if imageScale < 5 {
+                                    imageScale += 1
+                                    
+                                    // safety precaution to stop at 5x scale
+                                    if imageScale > 5 {
+                                        imageScale = 5
+                                    }
+                                }
+                            }
+                        } label: {
+                            ControlImageView(iconName: "plus.magnifyingglass")
+                        }
+                    }
+                    .padding(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(12)
+                    .opacity(isAnimating ? 1 : 0)
+                }
+                .padding(.bottom, 30)
+            })
         }
         .navigationViewStyle(.stack)
     }

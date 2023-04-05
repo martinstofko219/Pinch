@@ -11,6 +11,7 @@ struct MainAppView: View {
     @State private var isAnimating = false
     @State private var imageScale: CGFloat = 1
     @State private var imageOffset: CGSize = .zero
+    @State private var isDrawerOpen = false
     
     private func imageDoubleTap() {
         if imageScale == 1 {
@@ -141,6 +142,35 @@ struct MainAppView: View {
                 }
                 .padding(.bottom, 30)
             })
+            
+            //MARK: Drawer
+            .overlay(alignment: .topTrailing) {
+                HStack(spacing: 12) {
+                    //MARK: Drawer Handle
+                    Image(systemName: "chevron.compact.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                        .padding(8)
+                        .foregroundStyle(.secondary)
+                        .rotationEffect(Angle(degrees: isDrawerOpen ? 180 : 0))
+                        .onTapGesture {
+                            withAnimation(.easeOut) {
+                                isDrawerOpen.toggle()
+                            }
+                        }
+                    
+                    //MARK: Thumbnails
+                    Spacer()
+                }
+                .padding(EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8))
+                .background(.ultraThinMaterial)
+                .cornerRadius(12)
+                .opacity(isAnimating ? 1 : 0)
+                .frame(width: 260)
+                .padding(.top, UIScreen.main.bounds.height / 12)
+                .offset(x: isDrawerOpen ? 20 : 215)
+            }
         }
         .navigationViewStyle(.stack)
     }
